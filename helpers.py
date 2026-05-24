@@ -1,3 +1,4 @@
+import allure
 import random
 import string
 import requests

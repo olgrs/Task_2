@@ -1,3 +1,4 @@
+import allure
 import requests
 
 from data import ORDERS_URL
@@ -5,7 +6,6 @@ from data import ORDERS_URL
 
 class OrderApi:
 
-    @allure.step("Создание заказа")
     @staticmethod
     def create_order(payload, token=None):
         headers = {}
@@ -17,7 +17,6 @@ class OrderApi:
             headers=headers
         )
 
-    @allure.step("Получение списка заказов пользователя")
     @staticmethod
     def get_user_orders(token):
         return requests.get(

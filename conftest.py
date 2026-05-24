@@ -1,10 +1,10 @@
+import allure
 import pytest
 from api.user_api import UserApi
 
 from helpers import generate_random_string
 
 
-@allure.step("Регистрация нового пользователя")
 @pytest.fixture
 def new_user(user_data):
     response = UserApi.create_user(user_data)
@@ -12,6 +12,7 @@ def new_user(user_data):
     if response.status_code == 200:
         token = response.json()["accessToken"]
         UserApi.delete_user(token)
+
 
 @pytest.fixture
 def user_data():
