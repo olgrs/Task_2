@@ -13,9 +13,9 @@ class TestCreateOrder:
         payload = {"ingredients": [ingredients[0], ingredients[1]]}
         response = requests.post(
             ORDERS_URL, json=payload, headers={"Authorization": auth_token})
-        assert (response.status_code == 200
-                and response.json()["success"] == True
-                and "order" in response.json()), (
+        assert response.status_code == 200
+        assert response.json()["success"] == True
+        assert "order" in response.json(), (
             f"Ожидался успешный заказ, статус {response.status_code}, тело: {response.text}"
         )
 
@@ -24,9 +24,9 @@ class TestCreateOrder:
         ingredients = get_random_ingredients(2)
         payload = {"ingredients": [ingredients[0], ingredients[1]]}
         response = requests.post(ORDERS_URL, json=payload)
-        assert (response.status_code == 200
-                and response.json()["success"] == True
-                and "order" in response.json()), (
+        assert response.status_code == 200
+        assert response.json()["success"] == True
+        assert "order" in response.json(), (
             f"Ожидался успешный заказ, статус {response.status_code}, тело: {response.text}"
         )
 
@@ -34,9 +34,9 @@ class TestCreateOrder:
     def test_create_order_empty_ingredients(self):
         payload = {"ingredients": []}
         response = requests.post(ORDERS_URL, json=payload)
-        assert (response.status_code == 400
-                and response.json()["success"] == False
-                and "Ingredient ids must be provided" in response.json()["message"]), (
+        assert response.status_code == 400
+        assert response.json()["success"] == False
+        assert "Ingredient ids must be provided" in response.json()["message"], (
             f"Ожидалась ошибка 400, статус {response.status_code}, тело: {response.text}"
         )
 

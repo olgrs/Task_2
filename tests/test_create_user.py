@@ -11,8 +11,8 @@ class TestCreateUser:
     @allure.title("Успешное создание уникального пользователя")
     def test_create_unique_user_success(self, new_user):
         response, _, _ = new_user
-        assert (response.status_code == 200 
-                and response.json()["success"] == True), (
+        assert response.status_code == 200 
+        assert response.json()["success"] == True, (
             f"Ожидался статус 200 и success:true, получен статус {response.status_code}, тело: {response.text}"
         )
 
@@ -24,7 +24,9 @@ class TestCreateUser:
             "name": user_data["name"]
         }
         response = requests.post(REGISTER_URL, json=payload)
-        assert response.status_code == 403 and response.json()["success"] == False and "User already exists" in response.json()["message"], (
+        assert response.status_code == 403 
+        assert response.json()["success"] == False 
+        assert "User already exists" in response.json()["message"], (
             f"Ожидалась ошибка 403, получен статус {response.status_code}, тело: {response.text}"
         )
 
@@ -38,6 +40,8 @@ class TestCreateUser:
         }
         del payload[missing_field]
         response = requests.post(REGISTER_URL, json=payload)
-        assert response.status_code == 403 and response.json()["success"] == False and "required" in response.json()["message"].lower(), (
+        assert response.status_code == 403 
+        assert response.json()["success"] == False 
+        assert "required" in response.json()["message"].lower(), (
             f"Ожидалась ошибка 403 при отсутствии поля {missing_field}, получен статус {response.status_code}, тело: {response.text}"
         )
