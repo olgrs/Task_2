@@ -1,6 +1,8 @@
 import allure
 import pytest
 import requests
+
+from api.user_api import UserApi
 from data import USER_URL
 from helpers import generate_random_string
 
@@ -13,9 +15,11 @@ class TestUpdateUser:
         ("password", generate_random_string()),
         ("name", f"UpdatedName_{generate_random_string()}")
     ])
-    def test_update_user_with_auth(self, auth_token, field, new_value):
+    def test_update_user_with_auth(self, new_user, field, new_value):
+        response_create_user, _ = new_user
+        token = response_create_user.json()["accessToken"]
         payload = {field: new_value}
-        response = requests.patch(USER_URL, json=payload, headers={"Authorization": auth_token})
+        response = UserApi.update_user(payload, token)
         assert response.status_code == 200 
         assert response.json()["success"] == True, (
             f"Ожидался статус 200 и success:true при изменении {field}, "

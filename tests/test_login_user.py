@@ -7,7 +7,8 @@ from data import LOGIN_URL
 class TestLoginUser:
 
     @allure.title("Успешный логин существующего пользователя")
-    def test_login_success(self, user_data):
+    def test_login_success(self, new_user):
+        _, user_data = new_user
         payload = {"email": user_data["email"], "password": user_data["password"]}
         response = requests.post(LOGIN_URL, json=payload)
         assert response.status_code == 200 

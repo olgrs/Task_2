@@ -1,6 +1,7 @@
 import allure
 import requests
 
+from api.order_api import OrderApi
 from data import ORDERS_URL
 from helpers import get_random_ingredients
 
@@ -8,11 +9,15 @@ from helpers import get_random_ingredients
 class TestCreateOrder:
 
     @allure.title("Создание заказа с авторизацией и валидными ингредиентами")
-    def test_create_order_with_auth_valid_ingredients(self, auth_token):
+    def test_create_order_with_auth_valid_ingredients(self, new_user):
+        response_new_user, _ = new_user
+        token = response_new_user.json()["accessToken"]
         ingredients = get_random_ingredients(2)
         payload = {"ingredients": [ingredients[0], ingredients[1]]}
-        response = requests.post(
-            ORDERS_URL, json=payload, headers={"Authorization": auth_token})
+        response = OrderApi.create_order(
+            payload,
+            token
+        )
         assert response.status_code == 200
         assert response.json()["success"] == True
         assert "order" in response.json(), (

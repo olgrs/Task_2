@@ -1,6 +1,7 @@
 import allure
 import requests
 
+from api.order_api import OrderApi
 from data import ORDERS_URL
 from helpers import get_random_ingredients
 
@@ -8,11 +9,16 @@ from helpers import get_random_ingredients
 class TestGetUserOrders:
 
     @allure.title("Получение заказов авторизованного пользователя")
-    def test_get_orders_with_auth(self, auth_token):
+    def test_get_orders_with_auth(self, new_user):
+        response_new_user, _ = new_user
+        token = response_new_user.json()["accessToken"]
         ingredients = get_random_ingredients(2)
         payload = {"ingredients": [ingredients[0], ingredients[1]]}
-        requests.post(ORDERS_URL, json=payload, headers={"Authorization": auth_token})
-        response = requests.get(ORDERS_URL, headers={"Authorization": auth_token})
+        create_response = OrderApi.create_order(
+            payload,
+            token
+        )
+        response = OrderApi.get_user_orders(token)
         assert response.status_code == 200 
         assert response.json()["success"] == True 
         assert "orders" in response.json(), (

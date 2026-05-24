@@ -9,21 +9,31 @@ from helpers import generate_random_string
 class TestCreateUser:
 
     @allure.title("Успешное создание уникального пользователя")
-    def test_create_unique_user_success(self, user_data_before_registration):
-        response = requests.post(REGISTER_URL, json=user_data_before_registration)
+    def test_create_unique_user_success(self, user_data):
+        response = requests.post(REGISTER_URL, json=user_data)
         assert response.status_code == 200
         assert response.json()["success"] is True, (
             f"Ожидался success=True, получено: {response.json()}"
         )
 
     @allure.title("Создание уже зарегистрированного пользователя")
-    def test_create_existing_user(self, user_data):
+    def test_create_existing_user(
+            self,
+            new_user
+    ):
+
+        _, user_data = new_user
+
         payload = {
             "email": user_data["email"],
             "password": user_data["password"],
             "name": user_data["name"]
         }
-        response = requests.post(REGISTER_URL, json=payload)
+
+        response = requests.post(
+            REGISTER_URL,
+            json=payload
+        )
         assert response.status_code == 403 
         assert response.json()["success"] == False 
         assert "User already exists" in response.json()["message"], (
