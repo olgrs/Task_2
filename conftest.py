@@ -4,6 +4,7 @@ from api.user_api import UserApi
 from helpers import generate_random_string
 
 
+@allure.step("Регистрация нового пользователя")
 @pytest.fixture
 def new_user(user_data):
     response = UserApi.create_user(user_data)
