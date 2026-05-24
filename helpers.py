@@ -6,21 +6,21 @@ from data import *
 def generate_random_string(length=10):
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
 
-def register_new_user():
-    """Регистрирует нового пользователя и возвращает (email, password, name, token)."""
-    email = f"test_{generate_random_string()}@example.com"
-    password = generate_random_string()
-    name = f"User_{generate_random_string()}"
-    payload = {"email": email, "password": password, "name": name}
-    response = requests.post(REGISTER_URL, json=payload)
-    if response.status_code == 200 and response.json().get("success"):
-        token = response.json().get("accessToken")
-        return email, password, name, token
-    return None, None, None, None
+# def register_new_user():
+#     """Регистрирует нового пользователя и возвращает (email, password, name, token)."""
+#     email = f"test_{generate_random_string()}@example.com"
+#     password = generate_random_string()
+#     name = f"User_{generate_random_string()}"
+#     payload = {"email": email, "password": password, "name": name}
+#     response = requests.post(REGISTER_URL, json=payload)
+#     if response.status_code == 200 and response.json().get("success"):
+#         token = response.json().get("accessToken")
+#         return email, password, name, token
+#     return None, None, None, None
 
-def delete_user(token):
-    """Удаляет пользователя по токену."""
-    requests.delete(USER_URL, headers={"Authorization": token})
+# def delete_user(token):
+#     """Удаляет пользователя по токену."""
+#     requests.delete(USER_URL, headers={"Authorization": token})
 
 def get_ingredients():
     """Возвращает список ID ингредиентов."""

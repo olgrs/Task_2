@@ -9,11 +9,11 @@ from helpers import generate_random_string
 class TestCreateUser:
 
     @allure.title("Успешное создание уникального пользователя")
-    def test_create_unique_user_success(self, new_user):
-        response, _, _ = new_user
-        assert response.status_code == 200 
-        assert response.json()["success"] == True, (
-            f"Ожидался статус 200 и success:true, получен статус {response.status_code}, тело: {response.text}"
+    def test_create_unique_user_success(self, user_data_before_registration):
+        response = requests.post(REGISTER_URL, json=user_data_before_registration)
+        assert response.status_code == 200
+        assert response.json()["success"] is True, (
+            f"Ожидался success=True, получено: {response.json()}"
         )
 
     @allure.title("Создание уже зарегистрированного пользователя")

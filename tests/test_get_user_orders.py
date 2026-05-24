@@ -24,6 +24,6 @@ class TestGetUserOrders:
         response = requests.get(ORDERS_URL)
         assert response.status_code == 401
         assert response.json()["success"] == False
-        assert "You should be authorised" in response.json()["message"]), (
+        assert "You should be authorised" in response.json()["message"], (
             f"Ожидалась ошибка авторизации, статус {response.status_code}, тело: {response.text}"
         )

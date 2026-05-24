@@ -1,12 +1,8 @@
 import pytest
 import requests
-import random
-import string
+
 from data import REGISTER_URL, DELETE_USER_URL
-
-
-def generate_random_string(length=10):
-    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
+from helpers import generate_random_string
 
 
 @pytest.fixture
@@ -33,7 +29,6 @@ def new_user():
     if token:
         requests.delete(DELETE_USER_URL, headers={"Authorization": token})
 
-
 @pytest.fixture
 def auth_token(new_user):
     """
@@ -43,7 +38,6 @@ def auth_token(new_user):
     _, _, token = new_user
     return token
 
-
 @pytest.fixture
 def user_data(new_user):
     """
@@ -51,3 +45,11 @@ def user_data(new_user):
     """
     _, data, _ = new_user
     return data
+
+@pytest.fixture
+def user_data_before_registration():
+    email = f"test_{generate_random_string()}@example.com"
+    password = generate_random_string()
+    name = f"User_{generate_random_string()}"
+    user_data = {"email": email, "password": password, "name": name}
+    return user_data

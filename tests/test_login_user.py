@@ -22,7 +22,7 @@ class TestLoginUser:
         response = requests.post(LOGIN_URL, json=payload)
         assert response.status_code == 401 
         assert response.json()["success"] == False
-                and "email or password" in response.json()["message"].lower(), (
+        assert "email or password" in response.json()["message"].lower(), (
             f"Ожидалась ошибка 401, получен статус {response.status_code}, тело: {response.text}"
         )
 
